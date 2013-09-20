@@ -1,0 +1,23 @@
+<!-- https://tools.ietf.org/html/rfc4287 -->
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><?php echo $title; ?></title>
+  <link href="<?php echo $link; ?>" rel="alternate" />
+  <link rel="self" href="//<?php echo $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>" />
+  <id><?php echo 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?></id>
+  <updated><?php echo date('c'); ?></updated>
+  <icon>https://twitter.com/favicon.ico</icon>
+
+  <?php foreach ($entries as $entry) { ?>
+
+  <entry>
+    <title><?php echo $entry->title; ?></title>
+    <link href="<?php echo $entry->link; ?>" />
+    <id><?php echo $entry->id; ?></id>
+    <updated><?php echo $entry->updated; ?></updated>
+    <content type="html"><?php echo htmlspecialchars($entry->content); ?></content>
+    <author><name><?php echo $entry->author_name; ?></name></author>
+  </entry>
+
+  <?php } ?>
+
+</feed>
