@@ -1,0 +1,24 @@
+<!-- https://tools.ietf.org/html/rfc4287 -->
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Feed Error</title>
+  <link href="" rel="alternate" />
+  <link rel="self" href="//<?php echo htmlspecialchars($_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']); ?>" />
+  <id><?php echo htmlspecialchars('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']); ?></id>
+  <updated><?php echo date('c'); ?></updated>
+
+  <entry>
+    <title>Feed Error :-(</title>
+    <link href="" />
+    <id><?php echo htmlspecialchars('http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']); ?></id>
+    <updated><?php echo date('c'); ?></updated>
+    <content type="html">
+      There was an error while trying to fetch this feed. The error message is:
+      &lt;blockquote&gt;
+      <?php echo $error_message; ?>
+      &lt;/blockquote&gt;
+      <!-- TODO: add link to docs/github -->
+    </content>
+    <author><name>:-(</name></author>
+  </entry>
+
+</feed>
