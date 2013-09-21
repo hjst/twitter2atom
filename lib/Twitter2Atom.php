@@ -171,10 +171,11 @@ class Twitter2Atom
    * @return array Link objects suitable for rendering as Atom.
    */
   protected function get_links_from_api($resource, $params, $method='GET') {
-    $query_string = '?' . http_build_query($params);
-    $api_response = $this->twitter->setGetfield($query_string)
-      ->buildOauth($resource, $method)
-      ->performRequest();
+    if (count($params) > 0) {
+      $query_string = '?' . http_build_query($params);
+      $this->twitter->setGetfield($query_string);
+    }
+    $api_response = $this->twitter->buildOauth($resource, $method)->performRequest();
     $tweets = json_decode($api_response);
     if (is_object($tweets) && property_exists($tweets, 'statuses')) {
       // HACK: normalise API responses (compare search & list results for example)
