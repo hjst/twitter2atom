@@ -16,7 +16,9 @@
       &lt;blockquote&gt;
       <?php echo $error_message; ?>
       &lt;/blockquote&gt;
-      <!-- TODO: add link to docs/github -->
+      &lt;a href="https://github.com/hjst/twitter2atom/#readme"&gt;
+        Refer to the documentation.
+      &lt;/a&gt;
     </content>
     <author><name>:-(</name></author>
   </entry>
