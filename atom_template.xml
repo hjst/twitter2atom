@@ -11,7 +11,7 @@
 
   <entry>
     <title><?php echo $entry->title; ?></title>
-    <link href="<?php echo $entry->link; ?>" />
+    <link href="<?php echo htmlspecialchars($entry->link); ?>" />
     <id><?php echo htmlspecialchars($entry->id); ?></id>
     <updated><?php echo $entry->updated; ?></updated>
     <content type="html"><?php echo htmlspecialchars($entry->content); ?></content>

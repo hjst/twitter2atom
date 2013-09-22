@@ -27,6 +27,11 @@ class Twitter2Atom
   protected $twitter;
 
   /**
+   * Used by the unshorten_callback to stash links from async curl responses
+   */
+  protected $shortened_links = array();
+
+  /**
    * Constructor, simply pass in a TwitterAPIExchange object
    */
   public function __construct($twitter_api_obj) {
@@ -205,14 +210,52 @@ class Twitter2Atom
   /**
    * Expand URLs using parallel/recursive curl
    *
-   * Long explanation goes here.
+   * Use Josh Fraser's RollingCurl lib to recursively follow the
+   * links to remove all URL shortening and redirects. This has
+   * the potential to trigger hundreds of HTTP requests so use with
+   * care.
    *
-   * @todo The whole thing, obviously
    * @param array $links An array of link objects.
    * @return array Modified array of link objects.
    */
   protected function unshorten($links) {
-    return $links;
+    require_once('lib/curl/RollingCurl.php');
+    $async_curl = new RollingCurl(array($this, 'unshorten_callback')); 
+    $async_curl->window_size = 5;
+    $async_curl->options = array(CURLOPT_HEADER => true, CURLOPT_NOBODY => true); 
+    foreach($links as $link) {
+      $req = new RollingCurlRequest($link->link);
+      $req->callback_payload = $link;
+      $async_curl->add($req);
+    }
+    $async_curl->execute();
+    // The callback method stashes the shortened link objects in
+    // $this->shortened_links. After $async_curl->execute() returns
+    // we can now sort & return the array of shortened links:
+    usort($this->shortened_links, array($this, 'sort_links'));
+    // return a reverse-sorted array of links, most recent first
+    return array_reverse($this->shortened_links);
+  }
+
+  /**
+   * Helper callback function for use with unshorten()
+   */
+  public function unshorten_callback($response, $info, $request) {
+    $shortened = $request->callback_payload;
+    $shortened->link = $info['url'];
+    $this->shortened_links[] = $shortened;
+  }
+
+  /**
+   * Helper comparison function for use with usort()
+   */
+  static public function sort_links($a, $b) {
+    $a_timestamp = strtotime($a->updated);
+    $b_timestamp = strtotime($b->updated);
+    if ($a_timestamp === $b_timestamp) {
+      return 0;
+    }
+    return ($a_timestamp > $b_timestamp) ? 1 : -1;
   }
 
   /**

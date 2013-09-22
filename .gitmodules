@@ -1,3 +1,6 @@
 [submodule "lib/twitter"]
 	path = lib/twitter
 	url = https://github.com/J7mbo/twitter-api-php.git
+[submodule "lib/curl"]
+	path = lib/curl
+	url = https://github.com/hjst/rolling-curl.git

@@ -65,5 +65,3 @@ if (isset($error_message)) {
 
 header('Content-type: application/atom+xml');
 print($atom);
-
-
