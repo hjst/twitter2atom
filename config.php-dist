@@ -7,6 +7,22 @@ $config = Array(
   'oauth_access_token'        => '',
   'oauth_access_token_secret' => '',
 
+  // Domain blacklist - links to these domains will be ignored and will
+  // not appear in any Atom feeds.
+  //
+  // N.B. www.domain.com and domain.com are different and if you want to
+  // blacklist both you must specify both. Wildcard (*) domains are NOT
+  // supported.
+  //
+  // This is disabled by default, just uncomment & edit the following
+  // lines to enable:
+  # 'domain_blacklist' => array(
+  #   'instagram.com',
+  #   'www.facebook.com',
+  #   'tumblr.com',
+  #   'www.tumblr.com'
+  # ),
+
   // The base timezone for date/time calculations. This should always be
   // UTC but you have the option to change it if necessary:
   'base_timezone' => 'UTC',

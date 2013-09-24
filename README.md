@@ -145,6 +145,19 @@ Be aware though that this causes at least one HTTP HEAD request for each link
 in the feed, so it significantly increases the amount of time & resources
 required to generate the feed.
 
+Domain blacklist
+----------------
+
+In the config file you can define a domain blacklist. Any links to these
+domains will be silently ignored and will not appear in Atom feeds. 
+
+It's worth pointing out that the Twitter API treats uploaded/embedded images as
+Media entities rather than URL entities. Twitter2Atom only operates on URL
+entities, so there is no need to blacklist pic.twitter.com and similar domains
+to avoid most photos of cats and people's lunch.
+
+Blacklisting `instagram.com` might be a good idea though, depending on your
+needs.
 
 Acknowledgments
 ===============
