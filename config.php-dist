@@ -1,7 +1,20 @@
 <?php
-$twitter_config = Array(
+$config = Array(
+
+  // Twitter OAuth credentials:
   'consumer_key'              => '',
   'consumer_secret'           => '',
   'oauth_access_token'        => '',
-  'oauth_access_token_secret' => ''
+  'oauth_access_token_secret' => '',
+
+  // The base timezone for date/time calculations. This should always be
+  // UTC but you have the option to change it if necessary:
+  'base_timezone' => 'UTC',
+
+  // Only change this value if you understand the
+  // effect it will have. 5 is a conservative, safe
+  // default which works fine for everyone. The value
+  // must be greater than 1.
+  'max_concurrent_curl_connections' => 5
+
 );

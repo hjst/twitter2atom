@@ -1,12 +1,15 @@
 <?php
-require_once('config.php');
+// Load dependencies
 require_once('lib/twitter/TwitterAPIExchange.php');
+require_once('lib/curl/RollingCurl.php');
 require_once('lib/Twitter2Atom.php');
-date_default_timezone_set('UTC');
 
-$twitter_api_obj = new TwitterAPIExchange($twitter_config);
-$twitter_atom = new Twitter2Atom($twitter_api_obj);
+// Load config and initialise
+require_once('config.php');
+date_default_timezone_set($config['base_timezone']);
+$twitter_atom = new Twitter2Atom($config);
 
+// Parse the query string and pass requests through to appropriate methods
 $query = array();
 parse_str($_SERVER['QUERY_STRING'], $query);
 
@@ -56,6 +59,7 @@ if (isset($query['op'])) {
   $error_message = "You need to set the 'op' query parameter.";
 }
 
+// If there was an error, build a single-entry Atom feed with an error message
 if (isset($error_message)) {
   ob_start();
   include('atom_error.xml');
@@ -63,5 +67,6 @@ if (isset($error_message)) {
   ob_end_clean();
 }
 
+// Send appropriate response header and output Atom XML
 header('Content-type: application/atom+xml');
 print($atom);

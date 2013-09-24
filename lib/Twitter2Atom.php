@@ -2,6 +2,11 @@
 /**
  * Create Atom link feeds from the Twitter REST API v1.1
  *
+ * Dependencies: (these classes must be loaded)
+ *    TwitterAPIExchange: https://github.com/J7mbo/twitter-api-php
+ *    RollingCurl:        https://github.com/hjst/rolling-curl
+ *    RollingCurlRequest: https://github.com/hjst/rolling-curl
+ *
  * @author Henry Todd <henry@hjst.org>
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
  * @copyright 2013 Henry Todd
@@ -22,6 +27,11 @@ class Twitter2Atom
   );
 
   /**
+   * Array containing instance-specific config
+   */
+  protected $config = array();
+
+  /**
    * Twitter API handler object (TwitterAPIExchange)
    */
   protected $twitter;
@@ -32,10 +42,18 @@ class Twitter2Atom
   protected $shortened_links = array();
 
   /**
+   * Implements Josh Fraser's "RollingCurl" API
+   */
+  protected $async_curl = null;
+
+  /**
    * Constructor, simply pass in a TwitterAPIExchange object
    */
-  public function __construct($twitter_api_obj) {
-    $this->twitter = $twitter_api_obj;
+  public function __construct($config) {
+    $this->config = $config;
+    $this->twitter = new TwitterAPIExchange($this->config);
+    $this->async_curl = new RollingCurl(array($this, 'unshorten_callback'));
+    $this->async_curl->window_size = $this->config['max_concurrent_curl_connections'];
   }
 
   /**
@@ -219,18 +237,15 @@ class Twitter2Atom
    * @return array Modified array of link objects.
    */
   protected function unshorten($links) {
-    require_once('lib/curl/RollingCurl.php');
-    $async_curl = new RollingCurl(array($this, 'unshorten_callback')); 
-    $async_curl->window_size = 5;
-    $async_curl->options = array(CURLOPT_HEADER => true, CURLOPT_NOBODY => true); 
+    $this->async_curl->options = array(CURLOPT_HEADER => true, CURLOPT_NOBODY => true); 
     foreach($links as $link) {
       $req = new RollingCurlRequest($link->link);
       $req->callback_payload = $link;
-      $async_curl->add($req);
+      $this->async_curl->add($req);
     }
-    $async_curl->execute();
+    $this->async_curl->execute();
     // The callback method stashes the shortened link objects in
-    // $this->shortened_links. After $async_curl->execute() returns
+    // $this->shortened_links. After async_curl->execute() returns
     // we can now sort & return the array of shortened links:
     usort($this->shortened_links, array($this, 'sort_links'));
     // return a reverse-sorted array of links, most recent first
