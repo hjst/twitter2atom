@@ -70,6 +70,7 @@ class Twitter2Atom
    * @param string $list_owner Twitter username of the list owner.
    * @param string $list_name Twitter URL slug of the list, i.e. not a numeric id
    * @param array $opts Optional parameters, see Twitter API docs.
+   * @return string Atom XML.
    */
   public function get_list($list_owner, $list_name, $opts=array()) {
     $api_params = array_merge($opts, array(
@@ -96,8 +97,9 @@ class Twitter2Atom
    *
    * API docs: https://dev.twitter.com/docs/api/1.1/get/search/tweets
    *
-   * @param string $q The search query, same as https://twitter.com/search?q=
+   * @param string $query The search query, same as https://twitter.com/search?q=
    * @param array $opts Optional parameters, see Twitter API docs.
+   * @return string Atom XML.
    */
   public function search($query, $opts=array()) {
     $api_params = array_merge($opts, array(
@@ -123,6 +125,7 @@ class Twitter2Atom
    * API docs: https://dev.twitter.com/docs/api/1.1/get/statuses/home_timeline
    *
    * @param array $opts Optional parameters, see Twitter API docs.
+   * @return string Atom XML.
    */
   public function timeline_home($opts=array()) {
     $links = $this->get_links_from_api(
@@ -145,6 +148,7 @@ class Twitter2Atom
    * API docs: https://dev.twitter.com/docs/api/1.1/get/statuses/mentions_timeline
    *
    * @param array $opts Optional parameters, see Twitter API docs.
+   * @return string Atom XML.
    */
   public function timeline_mentions($opts=array()) {
     $links = $this->get_links_from_api(
@@ -168,6 +172,7 @@ class Twitter2Atom
    *
    * @param string $user The Twitter username of the Timeline.
    * @param array $opts Optional parameters, see Twitter API docs.
+   * @return string Atom XML.
    */
   public function timeline_user($user, $opts=array()) {
     $api_params = array_merge($opts, array(

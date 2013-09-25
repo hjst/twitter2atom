@@ -8,6 +8,7 @@ require_once('lib/Twitter2Atom.php');
 require_once('config.php');
 date_default_timezone_set($config['base_timezone']);
 $twitter_atom = new Twitter2Atom($config);
+$atom = "";
 
 // Parse the query string and pass requests through to appropriate methods
 $query = array();
