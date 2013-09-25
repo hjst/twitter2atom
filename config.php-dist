@@ -27,6 +27,11 @@ $config = Array(
   // but you have the option to change it if necessary:
   'base_timezone' => 'UTC',
 
+  // The User-Agent string to send with HTTP requests. Leaving it blank
+  // sometimes causes problems, and some redirects sniff this for known
+  // agent strings. Only change this if you know you have reason to.
+  'user_agent' => 'twitter2atom v1.1',
+
   // Only change this value if you understand the effect it will have. 5 is a
   // conservative, safe default which works fine for everyone. The value must
   // be greater than 1.

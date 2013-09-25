@@ -53,6 +53,7 @@ class Twitter2Atom
     $this->config = $config;
     $this->twitter = new TwitterAPIExchange($this->config);
     $this->async_curl = new RollingCurl(array($this, 'unshorten_callback'));
+    $this->async_curl->options = array(CURLOPT_USERAGENT => $this->config['user_agent']);
     $this->async_curl->window_size = $this->config['max_concurrent_curl_connections'];
   }
 
